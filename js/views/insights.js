@@ -1,5 +1,5 @@
 /* Insights screen. */
-import { CATEGORIES } from '../config.js';
+import { expenseCats } from '../config.js';
 import { icon } from '../icons.js';
 import { addDays, addMonths, clamp, endOfMonth, esc, fmtDate, startOfMonth, today, ymd } from '../utils.js';
 import { growth, money, pct } from '../money.js';
@@ -41,7 +41,7 @@ export function renderInsights() {
 
   // biggest changes by category
   const prevMap = Object.fromEntries(byCategory(prev30).map(c => [c.id, c.value]));
-  const movers = CATEGORIES.expense.map(c => {
+  const movers = expenseCats().map(c => {
     const now = (cats.find(x => x.id === c.id) || {}).value || 0, before = prevMap[c.id] || 0;
     return { ...c, now, before, diff: now - before };
   }).filter(x => x.now || x.before).sort((a, b) => Math.abs(b.diff) - Math.abs(a.diff)).slice(0, 5);

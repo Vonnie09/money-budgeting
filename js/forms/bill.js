@@ -1,5 +1,5 @@
 /* Create, edit, pay and un-pay bills. */
-import { CATEGORIES } from '../config.js';
+import { expenseCats } from '../config.js';
 import { icon } from '../icons.js';
 import { clamp, esc, monthKey, round2, today, uid, ymd } from '../utils.js';
 import { evaluate, groupDigits, money } from '../money.js';
@@ -21,7 +21,7 @@ export function openBill(id) {
         <label class="field">Due day of month<input name="dueDay" class="input" type="number" inputmode="numeric" min="1" max="31" value="${d.dueDay}"></label>
       </div>
       <div class="row2">
-        <label class="field">Category<select name="category" class="input">${CATEGORIES.expense.map(c => `<option value="${c.id}" ${c.id === d.category ? 'selected' : ''}>${c.name}</option>`).join('')}</select></label>
+        <label class="field">Category<select name="category" class="input">${expenseCats().map(c => `<option value="${c.id}" ${c.id === d.category ? 'selected' : ''}>${c.name}</option>`).join('')}</select></label>
         <label class="field">Pay from<select name="account" class="input">${db.accounts.map(a => `<option value="${a.id}" ${a.id === d.account ? 'selected' : ''}>${esc(a.name)}</option>`).join('')}</select></label>
       </div>
       <div class="form-actions">

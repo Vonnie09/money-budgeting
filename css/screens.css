@@ -171,3 +171,49 @@
 .tips li { counter-increment: tip; display: grid; grid-template-columns: 30px 1fr; gap: 12px; font-size: 14.5px; color: var(--ink-2); align-items: start; }
 .tips li::before { content: counter(tip); width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; background: var(--accent-soft); color: var(--accent-deep); font-weight: 800; font-size: 14px; }
 .tips b { color: var(--ink); }
+
+/* ---------- money list ---------- */
+.ml-layout { display: grid; grid-template-columns: 290px minmax(0, 1fr); gap: 20px; align-items: start; }
+.ml-lists { display: flex; flex-direction: column; gap: 10px; position: sticky; top: 96px; }
+.ml-pick {
+  display: grid; grid-template-columns: 40px minmax(0, 1fr) auto; gap: 12px; align-items: center;
+  width: 100%; padding: 12px; border-radius: 16px; border: 1.5px solid transparent;
+  background: var(--surface); box-shadow: var(--shadow); text-align: left; cursor: pointer;
+  transition: transform 140ms var(--ease-out), border-color 160ms ease;
+}
+.ml-pick .acct-swatch { width: 40px; height: 40px; border-radius: 12px; }
+.ml-pick.on { border-color: var(--accent); }
+.ml-pick:active { transform: scale(0.98); }
+.ml-ledger { display: flex; flex-direction: column; gap: 16px; }
+.ml-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; }
+.ml-head h2 { font: 800 24px/1.15 var(--font-display); font-stretch: 112%; }
+.ml-totals { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.ml-totals > div { padding: 12px 14px; border-radius: 14px; background: var(--surface-2); min-width: 0; }
+.ml-totals small { display: block; font-size: 12.5px; font-weight: 600; color: var(--ink-3); }
+.ml-totals strong { font-size: 20px; font-weight: 800; letter-spacing: -.02em; white-space: nowrap; }
+.ml-funded { display: flex; flex-direction: column; }
+.ml-fund { display: grid; grid-template-columns: 36px minmax(0, 1fr) auto; gap: 12px; align-items: center; padding: 8px 4px; text-decoration: none; border-top: 1px solid var(--line); }
+.ml-fund .tx-ico { width: 36px; height: 36px; border-radius: 11px; }
+.ml-form {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px; align-items: center; padding: 12px; border-radius: 16px; background: var(--surface-2);
+}
+.ml-form .seg { grid-column: 1 / -1; justify-self: start; }
+.ml-form .btn { grid-column: span 2; }
+.ml-form .input { background: var(--surface); height: 44px; }
+.ml-table { display: flex; flex-direction: column; }
+.ml-table-head, .ml-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 120px 120px; gap: 12px; align-items: center; }
+.ml-table-head { padding: 0 10px 8px; border-bottom: 1px solid var(--line); font-size: 12px; font-weight: 700; color: var(--ink-3); }
+.ml-table-head span:nth-child(n+3), .ml-row .amt, .ml-bal { text-align: right; }
+.ml-row { width: 100%; padding: 10px; border: 0; border-bottom: 1px solid var(--line); border-radius: 10px; background: none; text-align: left; cursor: pointer; transition: background-color 160ms ease; }
+.ml-row.start { cursor: default; background: var(--surface-2); border-bottom: 0; }
+.ml-row.flash { animation: flash 1400ms var(--ease-out); }
+.ml-date { font-size: 13px; font-weight: 700; color: var(--ink-2); }
+.ml-date-sm { display: none; }
+.ml-bal { font-weight: 700; color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ml-more { margin-top: 8px; padding: 10px; border: 1px dashed var(--surface-3); border-radius: 12px; background: none; color: var(--ink); font: 700 13.5px var(--font); cursor: pointer; }
+@media (hover: hover) and (pointer: fine) {
+  .ml-row:not(.start):hover, .ml-fund:hover { background: var(--surface-2); }
+  .ml-pick:hover { border-color: var(--surface-3); }
+  .ml-pick.on:hover { border-color: var(--accent); }
+}

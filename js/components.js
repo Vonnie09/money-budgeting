@@ -1,10 +1,10 @@
 /* Shared markup: charts, list rows, empty states, progress bars. */
 import { effectiveTheme } from './theme.js';
-import { cat } from './config.js';
+import { cat, DEMO_SIZES } from './config.js';
 import { icon } from './icons.js';
 import { clamp, esc, fmtDate, parse, sum } from './utils.js';
 import { money, pct } from './money.js';
-import { mode, ui } from './store.js';
+import { demoSize, mode, ui } from './store.js';
 import { account } from './queries.js';
 
 /* ---------- charts ---------- */
@@ -72,5 +72,10 @@ export function modeBar() {
       <button type="button" class="mode-reset" data-action="reset-mode" aria-label="${mode === 'demo' ? 'Reset demo' : 'Reset empty state'}">Reset<span class="mode-reset-what"> ${mode === 'demo' ? 'demo' : 'empty state'}</span></button>
       <button type="button" class="mode-theme" data-action="theme" aria-label="Switch to ${dark ? 'light' : 'dark'} mode" title="Switch to ${dark ? 'light' : 'dark'} mode">${icon(dark ? 'sun' : 'moon', 18)}</button>
     </div>
+    ${mode === 'demo' ? `<div class="mode-size">
+      <span>Sample data</span>
+      <div class="mode-seg" role="group" aria-label="Sample size">${Object.entries(DEMO_SIZES).map(([s, label]) =>
+        `<button type="button" class="${demoSize() === s ? 'on' : ''}" data-action="set-size" data-size="${s}" aria-pressed="${demoSize() === s}">${label}</button>`).join('')}</div>
+    </div>` : ''}
   </div>`;
 }

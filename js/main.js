@@ -1,9 +1,10 @@
 /* Entry point: click, form and keyboard handling, then first render. */
+import { saveListLine } from './forms/moneylist.js';
 import { formatTypedAmount } from './money.js';
-import { NAV, cat } from './config.js';
+import { cat, DEMO_SIZES, NAV } from './config.js';
 import { icon } from './icons.js';
 import { $, $$, addDays, addMonths, endOfMonth, parse, ymd } from './utils.js';
-import { db, mode, resetMode, save, setMode, ui } from './store.js';
+import { db, demoSize, mode, resetMode, save, setDemoSize, setMode, ui } from './store.js';
 import { setWelcomeDone } from './views/home.js';
 import { commit, currentView, render } from './render.js';
 import { closeModal, topLayer } from './ui/modal.js';
@@ -63,6 +64,7 @@ const actions = {
   'remove-budget': el => {
     const id = el.dataset.cat;
     delete db.budgets[id];
+    delete db.budgetFrom[id];
     closeModal(); commit();
     toast(`${cat(id).name} budget removed`, 'info');
   },
@@ -85,6 +87,21 @@ const actions = {
   'edit-account': el => openAccount(el.dataset.id),
   'delete-account': el => deleteAccount(el.dataset.id),
 
+  'ml-pick': el => { ui.listId = el.dataset.id; ui.mlAll = false; render(); },
+  'ml-open': el => {
+    ui.listId = el.dataset.id; ui.mlAll = false;
+    if (currentView() === 'money') render(); else location.hash = '#/money';
+  },
+  'ml-all': () => { ui.mlAll = true; render(); },
+  'set-size': el => {
+    const size = el.dataset.size;
+    if (size === demoSize()) return;
+    if (!confirm(`Load the ${DEMO_SIZES[size]} sample data? Changes you made in Demo Mode will be replaced.`)) return;
+    setDemoSize(size);
+    resetMode();
+    commit();
+    toast(`${DEMO_SIZES[size]} sample data loaded`, 'good');
+  },
   'set-mode': el => {
     if (el.dataset.mode === mode) return;
     setMode(el.dataset.mode);
@@ -122,6 +139,7 @@ document.addEventListener('submit', e => {
   else if (f.id === 'budget-form') saveBudget(f);
   else if (f.id === 'bill-form') saveBill(f);
   else if (f.id === 'account-form') saveAccount(f);
+  else if (f.id === 'ml-form') saveListLine(f);
 });
 
 document.addEventListener('keydown', e => {
@@ -144,7 +162,7 @@ document.addEventListener('keydown', e => {
 });
 
 /* ---------- boot ---------- */
-const navHtml = mobile => NAV.map(n => `<a href="#/${n.id}" data-nav="${n.id}">${icon(n.icon, mobile ? 22 : 20)}<span>${n.label}</span></a>`).join('');
+const navHtml = mobile => NAV.map(n => `<a href="#/${n.id}" data-nav="${n.id}">${icon(n.icon, mobile ? 22 : 20)}<span>${mobile ? (n.short || n.label) : n.label}</span></a>`).join('');
 $('#side-nav').innerHTML = navHtml(false);
 $('#bottom-nav').innerHTML = navHtml(true);
 $('#btn-calc').innerHTML = icon('calc');

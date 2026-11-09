@@ -356,3 +356,11 @@ form.form { display: flex; flex-direction: column; gap: 18px; }
   .mode-theme:hover { background: rgba(247, 248, 249, .08); }
 }
 .settings-group [data-mode-slot] .mode-seg { flex-basis: 100%; }
+
+/* sample size row (Demo Mode only) */
+.mode-size { flex-basis: 100%; display: flex; align-items: center; gap: 8px; padding: 2px 2px 0; }
+.mode-size > span { font: 600 12px var(--font); color: #A3A8AF; white-space: nowrap; }
+.mode-size .mode-seg, .mode-top .mode-size .mode-seg { flex: 1 1 auto; }
+.mode-size .mode-seg button { padding: 6px 8px; font-size: 12px; }
+.mode-side .mode-size { flex-wrap: wrap; gap: 6px; }
+.mode-side .mode-size > span { flex-basis: 100%; padding-left: 4px; }

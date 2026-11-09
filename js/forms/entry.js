@@ -1,17 +1,17 @@
 /* Add / edit / delete an income or expense entry. */
-import { CATEGORIES } from '../config.js';
+import { CATEGORIES, expenseCats } from '../config.js';
 import { icon } from '../icons.js';
 import { $, $$, addDays, esc, fmtDate, parse, round2, today, uid, ymd } from '../utils.js';
 import { currencySymbol, evaluate, groupDigits, money, pct } from '../money.js';
 import { db, ui } from '../store.js';
-import { budgetRows } from '../queries.js';
+import { account, budgetRows } from '../queries.js';
 import { commit } from '../render.js';
 import { closeModal, modalHead, openModal } from '../ui/modal.js';
 import { buzz, toast } from '../ui/toast.js';
 
 /* ----- transaction form ----- */
 export function catChips(type, selected) {
-  const list = CATEGORIES[type];
+  const list = type === 'expense' ? expenseCats() : CATEGORIES.income;
   const sel = list.some(c => c.id === selected) ? selected : list[0].id;
   return list.map(c => `<label class="cat-chip" style="--c:${c.color}">
     <input type="radio" name="category" value="${c.id}" ${c.id === sel ? 'checked' : ''}>
@@ -58,7 +58,7 @@ export function openTx(id, preset = {}) {
         <summary><span class="more-sum">${icon('calendar', 16)}<span id="sum-date"></span>${icon('wallet', 16)}<span id="sum-acct"></span></span><span class="more-change">Change</span></summary>
         <div class="row2" style="margin-top:12px">
           <label class="field">Date<input type="date" name="date" class="input" value="${d.date}" required></label>
-          <label class="field">Wallet
+          <label class="field">Money list
             <select name="account" class="input">${db.accounts.map(a => `<option value="${a.id}" ${a.id === d.account ? 'selected' : ''}>${esc(a.name)}</option>`).join('')}</select>
           </label>
         </div>
@@ -76,6 +76,17 @@ export function openTx(id, preset = {}) {
   form.date.addEventListener('change', sync);
   form.account.addEventListener('change', sync);
   sync();
+  // a category whose budget takes money from a list pre-selects that list
+  const followBudget = () => {
+    const c = form.querySelector('input[name="category"]:checked')?.value;
+    const from = db.budgetFrom[c];
+    if (!t && form.querySelector('input[name="type"]:checked').value === 'expense' && from && account(from)) {
+      form.account.value = from;
+      sync();
+    }
+  };
+  $('#cat-grid', m).addEventListener('change', followBudget);
+  if (!preset.account) followBudget();
   $$('input[name="type"]', m).forEach(r => r.addEventListener('change', () => {
     const grid = $('#cat-grid', m);
     grid.innerHTML = catChips(r.value, null);

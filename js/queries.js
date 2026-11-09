@@ -28,7 +28,7 @@ export function budgetRows(monthDate) {
   return Object.entries(db.budgets).map(([id, limit]) => {
     const s = spent[id] || 0;
     const p = limit > 0 ? s / limit * 100 : 0;
-    return { ...cat(id), limit, spent: s, pct: p, state: p >= 100 ? 'over' : p >= 80 ? 'warn' : 'ok' };
+    return { ...cat(id), id, limit, spent: s, pct: p, from: db.budgetFrom[id] || null, state: p >= 100 ? 'over' : p >= 80 ? 'warn' : 'ok' };
   }).sort((a, b) => b.pct - a.pct);
 }
 
@@ -128,3 +128,20 @@ export function emergencyFund() {
   const monthly = avgMonthlySpend(null, 3);
   return { current, monthly, months: monthly > 0 ? current / monthly : 0, target: monthly * 6 };
 }
+
+/* ---------- money lists ---------- */
+// Every line of a list in date order, with the balance after each one.
+export function listLines(a) {
+  let balance = a.start;
+  return db.tx.filter(t => t.account === a.id)
+    .sort((x, y) => x.date.localeCompare(y.date) || x.ts - y.ts)
+    .map(t => {
+      balance += t.type === 'income' ? t.amount : -t.amount;
+      return { t, balance };
+    });
+}
+// Money set aside this month for budgets funded by this list and not spent yet.
+export function listReserve(id) {
+  return sum(budgetRows(today()).filter(r => r.from === id), r => Math.max(r.limit - r.spent, 0));
+}
+export const freeToSpend = a => accountBalance(a) - listReserve(a.id);

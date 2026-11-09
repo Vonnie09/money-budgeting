@@ -113,9 +113,9 @@ export function renderHome() {
     </section>
 
     <section class="card col-12">
-      <div class="card-head"><h2 class="card-title">My wallets</h2><button class="btn sm" data-action="new-account">${icon('plus', 16)} Add wallet</button></div>
+      <div class="card-head"><h2 class="card-title">Money lists</h2><a class="link-btn" href="#/money">Open Money List</a></div>
       <div class="wallet-grid">
-        ${db.accounts.map(a => `<button class="wallet" data-action="edit-account" data-id="${a.id}">
+        ${db.accounts.map(a => `<button class="wallet" data-action="ml-open" data-id="${a.id}">
           <span class="acct-swatch" style="background:${a.color};--on:${inkOn(a.color)}">${icon(ACCOUNT_TYPES[a.type]?.icon || 'wallet', 22)}</span>
           <span class="tx-main"><strong>${esc(a.name)}</strong><small>${ACCOUNT_TYPES[a.type]?.label || 'Wallet'}</small></span>
           <span class="amt">${money(accountBalance(a))}</span>

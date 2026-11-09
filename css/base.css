@@ -31,3 +31,4 @@ input, select { caret-color: var(--brand); }
 ::placeholder { color: var(--ink-3); opacity: 1; }
 .ic { flex: none; display: block; }
 .num, .amt { font-variant-numeric: tabular-nums; }
+[hidden] { display: none !important; }

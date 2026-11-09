@@ -4,6 +4,8 @@ export const STORE_KEY = 'mm-demo-v4';
 export const THEME_KEY = 'mm-theme';
 export const EMPTY_KEY = 'mm-empty-v1';   // your own data in Empty State
 export const MODE_KEY = 'mm-mode';        // 'demo' or 'empty'
+export const SIZE_KEY = 'mm-demo-size';   // sample size in Demo Mode
+export const DEMO_SIZES = { small: 'Small', medium: 'Medium', full: 'Full' };
 
 /* ---------- reference data ---------- */
 export const CATEGORIES = {
@@ -23,10 +25,15 @@ export const CATEGORIES = {
     { id: 'freelance', name: 'Freelance', icon: 'laptop', color: '#4A6378' },
     { id: 'business',  name: 'Business',  icon: 'store', color: '#FF8F00' },
     { id: 'gift',      name: 'Gifts',     icon: 'gift', color: '#FFAD33' },
+    { id: 'cashin',    name: 'Cash in',   icon: 'banknote', color: '#3B3F45' },
   ],
 };
 export const ALL_CATS = [...CATEGORIES.expense, ...CATEGORIES.income];
-export const cat = id => ALL_CATS.find(c => c.id === id) || CATEGORIES.expense[CATEGORIES.expense.length - 1];
+// Your own budget categories ("Others" with a name you typed). The store fills this in.
+export const customCats = [];
+export const CUSTOM_COLORS = ['#4A6378', '#2F8F6F', '#E0604A', '#D9577A', '#7A6A55', '#3E9AA8'];
+export const expenseCats = () => [...CATEGORIES.expense, ...customCats];
+export const cat = id => ALL_CATS.find(c => c.id === id) || customCats.find(c => c.id === id) || CATEGORIES.expense[CATEGORIES.expense.length - 1];
 
 export const ACCOUNT_TYPES = {
   cash:    { label: 'Cash',       icon: 'banknote' },
@@ -51,6 +58,7 @@ export const CURRENCIES = [
 export const NAV = [
   { id: 'home',     label: 'Home',     icon: 'home' },
   { id: 'records',  label: 'History',  icon: 'list' },
+  { id: 'money',    label: 'Money List', short: 'Money', icon: 'wallet' },
   { id: 'budgets',  label: 'Budgets',  icon: 'target' },
   { id: 'bills',    label: 'Bills',    icon: 'receipt' },
   { id: 'insights', label: 'Insights', icon: 'chart' },

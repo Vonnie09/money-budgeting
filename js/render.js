@@ -1,4 +1,5 @@
 /* Routing between screens and re-rendering after changes. */
+import { afterMoney, renderMoney } from './views/money.js';
 import { icon } from './icons.js';
 import { $, $$, fmtDate, today } from './utils.js';
 import { save, ui } from './store.js';
@@ -12,6 +13,7 @@ import { renderInsights } from './views/insights.js';
 
 export const VIEWS = {
   home:     { title: 'Home',     sub: () => `${greeting()} · ${fmtDate(today(), { weekday: 'long', month: 'long', day: 'numeric' })}`, render: renderHome },
+  money:    { title: 'Money List', sub: () => 'Every peso in and out, with a running balance', render: renderMoney, after: afterMoney },
   records:  { title: 'History',  sub: () => 'Everything you spent and earned', render: renderRecords, after: afterRecords },
   budgets:  { title: 'Budgets',  sub: () => 'A monthly limit for each category', render: renderBudgets },
   bills:    { title: 'Bills',    sub: () => 'Due dates and payments', render: renderBills },

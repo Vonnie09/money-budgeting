@@ -1,10 +1,10 @@
 /* Budgets screen. */
-import { CATEGORIES } from '../config.js';
+import { expenseCats } from '../config.js';
 import { icon } from '../icons.js';
-import { clamp, endOfMonth, fmtDate, sameMonth, startOfMonth, sum, today } from '../utils.js';
+import { clamp, endOfMonth, esc, fmtDate, sameMonth, startOfMonth, sum, today } from '../utils.js';
 import { money, pct, plural } from '../money.js';
 import { db, ui } from '../store.js';
-import { budgetRows, byCategory, txBetween } from '../queries.js';
+import { account, budgetRows, byCategory, txBetween } from '../queries.js';
 import { empty, progress } from '../components.js';
 
 /* ----- Budgets ----- */
@@ -19,7 +19,7 @@ export function renderBudgets() {
 
   const spentBy = byCategory(txBetween(startOfMonth(m), endOfMonth(m)));
   const unbudgeted = spentBy.filter(c => db.budgets[c.id] == null);
-  const free = CATEGORIES.expense.filter(c => db.budgets[c.id] == null);
+  const free = expenseCats();  // "Others" with your own name is always possible
 
   return `
   <div class="toolbar">
@@ -48,7 +48,7 @@ export function renderBudgets() {
         ${r.state === 'over' ? '<span class="stamp over">Over</span>' : ''}
         <div class="b-head">
           <span class="tx-ico" style="--c:${r.color}">${icon(r.icon)}</span>
-          <div class="b-name"><strong>${r.name}</strong><small>${money(r.limit)} monthly</small></div>
+          <div class="b-name"><strong>${esc(r.name)}</strong><small>${money(r.limit)} monthly${r.from && account(r.from) ? ` · from ${esc(account(r.from).name)}` : ''}</small></div>
           <button class="icon-btn sm ghost" data-action="edit-budget" data-cat="${r.id}" aria-label="Edit ${r.name} budget">${icon('edit', 18)}</button>
         </div>
         <div class="b-amt">${money(r.spent)} <small>spent</small></div>

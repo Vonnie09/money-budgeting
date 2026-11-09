@@ -1,5 +1,5 @@
 /* Sample data, saving to this browser, and shared app state. */
-import { EMPTY_KEY, MODE_KEY, STORE_KEY } from './config.js';
+import { customCats, EMPTY_KEY, MODE_KEY, SIZE_KEY, STORE_KEY } from './config.js';
 import { addDays, addMonths, endOfMonth, monthKey, round2, startOfMonth, sum, today, ymd } from './utils.js';
 import { setCurrency } from './money.js';
 
@@ -13,14 +13,20 @@ export function mulberry32(a) {
   };
 }
 
-export function seed() {
+// Sample sizes for Demo Mode: how many months back, and how busy each day is.
+const SIZES = { small: { months: 1, k: 0.6 }, medium: { months: 2, k: 0.85 }, full: { months: 5, k: 1 } };
+export const demoSize = () => { try { const s = localStorage.getItem(SIZE_KEY); return SIZES[s] ? s : 'medium'; } catch { return 'medium'; } };
+export function setDemoSize(size) { try { localStorage.setItem(SIZE_KEY, size); } catch { /* ignore */ } }
+
+export function seed(size = demoSize()) {
+  const { months, k } = SIZES[size] || SIZES.medium;
   const rnd = mulberry32(20261102);
   const between = (a, b) => a + rnd() * (b - a);
   const step = (n, s) => Math.round(n / s) * s;
   const pick = arr => arr[Math.floor(rnd() * arr.length)];
 
   const accounts = [
-    { id: 'cash',      name: 'Cash Wallet',    type: 'cash',    start: 3500,  color: '#FFAD33' },
+    { id: 'cash',      name: 'On hand cash',    type: 'cash',    start: 3500,  color: '#FFAD33' },
     { id: 'bank',      name: 'Savings Bank',   type: 'bank',    start: 38000, color: '#3B3F45' },
     { id: 'ewallet',   name: 'E-Wallet',       type: 'ewallet', start: 1800,  color: '#4A6378' },
     { id: 'emergency', name: 'Emergency Fund', type: 'savings', start: 26000, color: '#FF8F00', emergency: true },
@@ -41,25 +47,25 @@ export function seed() {
     tx.push({ id: 't' + (++n), ts: n, type, amount: round2(amount), category, account, date: ymd(date), note, ...extra });
 
   const end = today();
-  for (let d = addMonths(end, -5); d <= end; d = addDays(d, 1)) {
+  for (let d = addMonths(end, -months); d <= end; d = addDays(d, 1)) {
     const day = d.getDate(), dow = d.getDay(), last = endOfMonth(d).getDate();
 
     if (day === 15 || day === last) add('income', 22500, 'salary', 'bank', d, 'Payroll');
-    if (rnd() < 0.045) add('income', step(between(2500, 9000), 50), 'freelance', 'ewallet', d, pick(['Logo design', 'Website gig', 'Video edit', 'Tutoring']));
-    if (rnd() < 0.01) add('income', step(between(1000, 3000), 100), 'gift', 'cash', d, pick(['Birthday gift', 'Ninong & ninang', 'Bonus treat']));
+    if (rnd() < 0.045 * k) add('income', step(between(2500, 9000), 50), 'freelance', 'ewallet', d, pick(['Logo design', 'Website gig', 'Video edit', 'Tutoring']));
+    if (rnd() < 0.01 * k) add('income', step(between(1000, 3000), 100), 'gift', 'cash', d, pick(['Birthday gift', 'Ninong & ninang', 'Bonus treat']));
 
-    const meals = 1 + Math.floor(rnd() * 2);
+    const meals = 1 + (rnd() < 0.5 * k ? 1 : 0);
     for (let k = 0; k < meals; k++) {
       add('expense', step(between(80, 380), 5), 'food', rnd() < 0.55 ? 'cash' : 'ewallet', d,
         pick(['Lunch', 'Coffee', 'Merienda', 'Dinner out', 'Milk tea', 'Breakfast', 'Food delivery']));
     }
     if (dow >= 1 && dow <= 5 && rnd() < 0.85) add('expense', step(between(40, 180), 5), 'transport', rnd() < 0.6 ? 'cash' : 'ewallet', d, pick(['Jeep & MRT', 'Ride-hailing', 'Bus fare', 'Tricycle']));
     if (dow === 6) add('expense', step(between(1400, 2700), 10), 'groceries', 'bank', d, pick(['Weekly groceries', 'Supermarket run', 'Market haul']));
-    if (rnd() < 0.08) add('expense', step(between(350, 2600), 10), 'shopping', pick(['bank', 'ewallet']), d, pick(['New shoes', 'Online order', 'Home stuff', 'Clothes', 'Phone case']));
-    if ((dow === 5 || dow === 6) && rnd() < 0.35) add('expense', step(between(250, 1100), 10), 'fun', pick(['cash', 'ewallet']), d, pick(['Movie night', 'Karaoke', 'Concert ticket', 'Board game café', 'Bowling']));
-    if (rnd() < 0.03) add('expense', step(between(150, 900), 10), 'health', 'cash', d, pick(['Pharmacy', 'Vitamins', 'Check-up']));
-    if (rnd() < 0.025) add('expense', step(between(300, 1400), 10), 'education', 'ewallet', d, pick(['Online course', 'Books', 'School supplies']));
-    if (rnd() < 0.02) add('expense', step(between(100, 600), 10), 'other', 'cash', d, pick(['Donation', 'Laundry', 'Haircut']));
+    if (rnd() < 0.08 * k) add('expense', step(between(350, 2600), 10), 'shopping', pick(['bank', 'ewallet']), d, pick(['New shoes', 'Online order', 'Home stuff', 'Clothes', 'Phone case']));
+    if ((dow === 5 || dow === 6) && rnd() < 0.35 * k) add('expense', step(between(250, 1100), 10), 'fun', pick(['cash', 'ewallet']), d, pick(['Movie night', 'Karaoke', 'Concert ticket', 'Board game café', 'Bowling']));
+    if (rnd() < 0.03 * k) add('expense', step(between(150, 900), 10), 'health', 'cash', d, pick(['Pharmacy', 'Vitamins', 'Check-up']));
+    if (rnd() < 0.025 * k) add('expense', step(between(300, 1400), 10), 'education', 'ewallet', d, pick(['Online course', 'Books', 'School supplies']));
+    if (rnd() < 0.02 * k) add('expense', step(between(100, 600), 10), 'other', 'cash', d, pick(['Donation', 'Laundry', 'Haircut']));
 
     for (const b of bills) {
       if (b.dueDay === day) {
@@ -79,7 +85,9 @@ export function seed() {
   }
 
   const budgets = { food: 8500, groceries: 9000, transport: 2500, bills: 15000, shopping: 3500, fun: 2500, health: 2500, education: 1500 };
-  return { version: 1, currency: 'PHP', accounts, bills, tx, budgets };
+  // Food, groceries and shopping budgets take their money from the bank list
+  const budgetFrom = { food: 'bank', groceries: 'bank', shopping: 'bank' };
+  return { version: 1, currency: 'PHP', accounts, bills, tx, budgets, budgetFrom, customCats: [] };
 }
 
 /* ---------- Demo Mode / Empty State ----------
@@ -89,9 +97,9 @@ const keyFor = m => (m === 'empty' ? EMPTY_KEY : STORE_KEY);
 // Empty State starts with the usual wallets at zero and nothing else.
 export function blank(currency = 'PHP') {
   return {
-    version: 1, currency, bills: [], tx: [], budgets: {},
+    version: 1, currency, bills: [], tx: [], budgets: {}, budgetFrom: {}, customCats: [],
     accounts: [
-      { id: 'cash',      name: 'Cash Wallet',    type: 'cash',    start: 0, color: '#FFAD33' },
+      { id: 'cash',      name: 'On hand cash',    type: 'cash',    start: 0, color: '#FFAD33' },
       { id: 'bank',      name: 'Savings Bank',   type: 'bank',    start: 0, color: '#3B3F45' },
       { id: 'ewallet',   name: 'E-Wallet',       type: 'ewallet', start: 0, color: '#4A6378' },
       { id: 'emergency', name: 'Emergency Fund', type: 'savings', start: 0, color: '#FF8F00', emergency: true },
@@ -101,12 +109,24 @@ export function blank(currency = 'PHP') {
 
 export let mode = (() => { try { return localStorage.getItem(MODE_KEY) === 'empty' ? 'empty' : 'demo'; } catch { return 'demo'; } })();
 
+function normalize(data) {
+  data.budgetFrom ||= {};
+  data.customCats ||= [];
+  return data;
+}
+
+// Keep the shared custom-category list in step with the loaded data.
+export function syncCustom() {
+  customCats.length = 0;
+  customCats.push(...db.customCats);
+}
+
 export function load(m = mode) {
   try {
     const raw = localStorage.getItem(keyFor(m));
     if (raw) {
       const data = JSON.parse(raw);
-      if (data && data.version === 1) return data;
+      if (data && data.version === 1) return normalize(data);
     }
   } catch { /* storage blocked or corrupted: fall back to fresh data */ }
   return m === 'empty' ? blank() : seed();
@@ -117,6 +137,7 @@ export function save() {
 
 export let db = load();
 setCurrency(db.currency);
+syncCustom();
 
 // Switch datasets; the current one is saved first.
 export function setMode(next) {
@@ -126,12 +147,14 @@ export function setMode(next) {
   try { localStorage.setItem(MODE_KEY, next); } catch { /* ignore */ }
   db = load(next);
   setCurrency(db.currency);
+  syncCustom();
 }
 
 // "Reset demo" brings back fresh sample data; "Reset empty state" clears your entries.
 export function resetMode() {
   const currency = db.currency;
   db = mode === 'empty' ? blank(currency) : Object.assign(seed(), { currency });
+  syncCustom();
 }
 
 export const ui = {
@@ -141,6 +164,8 @@ export const ui = {
   query: '',
   bMonth: startOfMonth(today()),
   iMonth: startOfMonth(today()),
+  listId: null,     // open money list
+  mlAll: false,     // show every line, not just the latest 40
   lastView: null,
 };
 
