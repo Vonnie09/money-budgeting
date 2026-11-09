@@ -2,14 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   <title>Money Manager · Demo</title>
   <meta name="description" content="Track expenses in seconds. See where money goes, set budgets and organise bills. A demo web app with sample data.">
-  <meta name="theme-color" content="#F3EEE3">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#E9E4E0">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1D28">
+  <meta name="color-scheme" content="light dark">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fraunces:ital,opsz,wght@0,9..144,400..700;1,9..144,400..700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..900&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
   <script>
     // Apply the saved theme before the page paints, so there is no flash.
@@ -21,9 +23,9 @@
     <aside class="sidebar">
       <a class="brand" href="#/home">
         <span class="brand-mark" aria-hidden="true">
-          <svg viewBox="0 0 64 64" width="22" height="22"><path d="M22 46V18h12a9 9 0 0 1 0 18H22" fill="none" stroke="currentColor" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 18V7l8 6 8-6v11"/></svg>
         </span>
-        <span>Money<br>Manager</span>
+        <span>Money Manager</span>
       </a>
       <nav class="nav" id="side-nav" aria-label="Main"></nav>
       <div class="demo-note">
@@ -36,17 +38,16 @@
     <main class="main">
       <header class="topbar">
         <div class="page-heading">
-          <h1 id="page-title">Overview</h1>
+          <h1 id="page-title">Home</h1>
           <p id="page-sub"></p>
         </div>
         <div class="top-actions">
           <button class="btn btn-primary desktop-only" data-action="add">
             <svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-            Add record
+            Add entry
           </button>
           <button class="icon-btn" data-action="calc" aria-label="Calculator" title="Calculator" id="btn-calc"></button>
           <button class="icon-btn" data-action="alerts" aria-label="Notifications" title="Notifications" id="btn-bell"></button>
-          <button class="icon-btn hide-xs" data-action="theme" aria-label="Toggle dark mode" title="Toggle theme" id="btn-theme"></button>
           <button class="icon-btn" data-action="settings" aria-label="Settings" title="Settings" id="btn-settings"></button>
         </div>
       </header>
@@ -55,7 +56,7 @@
     </main>
 
     <nav class="bottom-nav" id="bottom-nav" aria-label="Main"></nav>
-    <button class="fab" data-action="add" aria-label="Add record">
+    <button class="fab" data-action="add" aria-label="Add entry">
       <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
     </button>
   </div>

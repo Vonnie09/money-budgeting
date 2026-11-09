@@ -8,14 +8,14 @@ This is a **demo**: there is no database and no login. On the first visit the ap
 
 | Screen | What it does |
 | --- | --- |
-| **Overview** | Monthly spend vs. budget, quick add, where your money went (donut chart), 6-month cash flow, budgets, upcoming bills, insight of the day, recent records |
-| **Records** | Daily / Weekly / Monthly views, previous and next buttons, search, expense/income filter. Tap a record to edit or delete it (with Undo) |
-| **Budgets** | Monthly limit per category, green/amber/red progress, "safe to spend per day", and alerts when you pass 80% or 100% |
+| **Home** | First-visit welcome guide, total balance, big "Add expense" / "Add income" buttons, how much is left to spend, where your money went, bills due soon (pay in one tap), a tip, recent activity, your wallets |
+| **History** | Day / Week / Month views, previous and next buttons, search, money in/out filter. Tap an entry to edit or delete it (with Undo) |
+| **Budgets** | Monthly limit per category, green/amber/red progress, "you can spend ₱X a day", and alerts when you pass 80% or 100% |
 | **Bills** | Bills shown as tickets with due dates, Paid / Due soon / Overdue labels. "Mark paid" records the expense for you |
-| **Insights** | Spending calendar, weekday pattern, what changed vs. the previous 30 days, emergency-fund progress, tips |
-| **Assets** | Net worth, accounts (cash, bank, e-wallet, savings…), balances |
+| **Insights** | Personal tips, money in vs. out for 6 months, emergency fund, spending calendar, what changed vs. the previous 30 days |
+| **Add entry** | Type the amount, pick a category, done. Date (today) and wallet are filled in for you; tap "Change" to edit them |
 | **Calculator** | Built-in calculator (top bar, or the calculator button inside the amount field). The amount field also accepts math like `120+85` |
-| **Settings** | Currency (₱ by default), light/dark theme, reset sample data, start empty |
+| **Settings** | Currency (₱ by default), light/dark theme, show the welcome guide again, bring back sample data, start empty |
 
 Keyboard shortcuts on desktop: **N** = new record, **C** = calculator, **Esc** = close.
 
