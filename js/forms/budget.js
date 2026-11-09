@@ -1,9 +1,9 @@
 /* Create and edit budgets. */
-import { cat, CUSTOM_COLORS, expenseCats } from '../config.js';
+import { cat, expenseCats } from '../config.js';
 import { icon } from '../icons.js';
-import { $, esc, round2, today, uid } from '../utils.js';
+import { $, esc, round2, today } from '../utils.js';
 import { evaluate, groupDigits, money } from '../money.js';
-import { db, syncCustom } from '../store.js';
+import { customCategory, db } from '../store.js';
 import { account, avgMonthlySpend, budgetRows, freeToSpend } from '../queries.js';
 import { commit } from '../render.js';
 import { closeModal, modalHead, openModal } from '../ui/modal.js';
@@ -68,14 +68,7 @@ export function saveBudget(form) {
   }
   if (!limit || limit <= 0) { toast('Enter a limit greater than zero', 'warn'); form.limit.focus(); return; }
   if (custom) {
-    // reuse a category you made before with the same name, otherwise make a new one
-    let c = db.customCats.find(x => x.name.toLowerCase() === custom.toLowerCase());
-    if (!c) {
-      c = { id: 'c' + uid(), name: custom, icon: 'tag', color: CUSTOM_COLORS[db.customCats.length % CUSTOM_COLORS.length] };
-      db.customCats.push(c);
-      syncCustom();
-    }
-    id = c.id;
+    id = customCategory(custom, 'expense').id;  // reuses one you named before
   }
   db.budgets[id] = round2(limit);
   const fromId = form.from.value;

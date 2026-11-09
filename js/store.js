@@ -1,6 +1,6 @@
 /* Sample data, saving to this browser, and shared app state. */
-import { customCats, EMPTY_KEY, MODE_KEY, SIZE_KEY, STORE_KEY } from './config.js';
-import { addDays, addMonths, endOfMonth, monthKey, round2, startOfMonth, sum, today, ymd } from './utils.js';
+import { CUSTOM_COLORS, customCats, EMPTY_KEY, MODE_KEY, SIZE_KEY, STORE_KEY } from './config.js';
+import { addDays, addMonths, endOfMonth, monthKey, round2, startOfMonth, sum, today, uid, ymd } from './utils.js';
 import { setCurrency } from './money.js';
 
 /* ---------- sample data ---------- */
@@ -13,13 +13,18 @@ export function mulberry32(a) {
   };
 }
 
-// Sample sizes for Demo Mode: how many months back, and how busy each day is.
-const SIZES = { small: { months: 1, k: 0.6 }, medium: { months: 2, k: 0.85 }, full: { months: 5, k: 1 } };
+// Sample sizes for Demo Mode: how many months back, how busy each day is,
+// how many bills and which budgets. Keep in step with SIZE_INFO in config.js.
+const SIZES = {
+  small:  { months: 1, k: 0.5,  bills: 3, budgets: ['food', 'transport', 'bills', 'shopping'] },
+  medium: { months: 3, k: 0.85, bills: 5, budgets: ['food', 'groceries', 'transport', 'bills', 'shopping', 'fun'] },
+  full:   { months: 6, k: 1.15, bills: 7, budgets: ['food', 'groceries', 'transport', 'bills', 'shopping', 'fun', 'health', 'education'] },
+};
 export const demoSize = () => { try { const s = localStorage.getItem(SIZE_KEY); return SIZES[s] ? s : 'medium'; } catch { return 'medium'; } };
 export function setDemoSize(size) { try { localStorage.setItem(SIZE_KEY, size); } catch { /* ignore */ } }
 
 export function seed(size = demoSize()) {
-  const { months, k } = SIZES[size] || SIZES.medium;
+  const { months, k, bills: billCount, budgets: budgetIds } = SIZES[size] || SIZES.medium;
   const rnd = mulberry32(20261102);
   const between = (a, b) => a + rnd() * (b - a);
   const step = (n, s) => Math.round(n / s) * s;
@@ -39,7 +44,7 @@ export function seed(size = demoSize()) {
     { id: 'b5', name: 'Mobile Postpaid', amount: 999,  dueDay: 18, category: 'bills',  account: 'bank' },
     { id: 'b6', name: 'Streaming Plan',  amount: 549,  dueDay: 22, category: 'fun',    account: 'bank' },
     { id: 'b7', name: 'Gym Membership',  amount: 1500, dueDay: 27, category: 'health', account: 'bank' },
-  ].map(b => ({ ...b, paid: [] }));
+  ].slice(0, billCount).map(b => ({ ...b, paid: [] }));
 
   const tx = [];
   let n = 0;
@@ -53,6 +58,7 @@ export function seed(size = demoSize()) {
     if (day === 15 || day === last) add('income', 22500, 'salary', 'bank', d, 'Payroll');
     if (rnd() < 0.045 * k) add('income', step(between(2500, 9000), 50), 'freelance', 'ewallet', d, pick(['Logo design', 'Website gig', 'Video edit', 'Tutoring']));
     if (rnd() < 0.01 * k) add('income', step(between(1000, 3000), 100), 'gift', 'cash', d, pick(['Birthday gift', 'Ninong & ninang', 'Bonus treat']));
+    if (k > 1 && rnd() < 0.03) add('income', step(between(1500, 6000), 50), 'business', 'ewallet', d, pick(['Online shop sales', 'Baked goods orders', 'Reselling']));
 
     const meals = 1 + (rnd() < 0.5 * k ? 1 : 0);
     for (let k = 0; k < meals; k++) {
@@ -84,9 +90,10 @@ export function seed(size = demoSize()) {
     a.start = Math.max(a.start, targets[a.id] - net);
   }
 
-  const budgets = { food: 8500, groceries: 9000, transport: 2500, bills: 15000, shopping: 3500, fun: 2500, health: 2500, education: 1500 };
+  const limits = { food: 8500, groceries: 9000, transport: 2500, bills: 15000, shopping: 3500, fun: 2500, health: 2500, education: 1500 };
+  const budgets = Object.fromEntries(budgetIds.map(id => [id, limits[id]]));
   // Food, groceries and shopping budgets take their money from the bank list
-  const budgetFrom = { food: 'bank', groceries: 'bank', shopping: 'bank' };
+  const budgetFrom = Object.fromEntries(['food', 'groceries', 'shopping'].filter(id => budgets[id]).map(id => [id, 'bank']));
   return { version: 1, currency: 'PHP', accounts, bills, tx, budgets, budgetFrom, customCats: [] };
 }
 
@@ -119,6 +126,18 @@ function normalize(data) {
 export function syncCustom() {
   customCats.length = 0;
   customCats.push(...db.customCats);
+}
+
+// Find the category you named before (same name and side), or make a new one.
+export function customCategory(name, type = 'expense') {
+  const clean = name.trim().replace(/\s+/g, ' ');
+  let c = db.customCats.find(x => (x.type || 'expense') === type && x.name.toLowerCase() === clean.toLowerCase());
+  if (!c) {
+    c = { id: 'c' + uid(), type, name: clean, icon: type === 'income' ? 'coins' : 'tag', color: CUSTOM_COLORS[db.customCats.length % CUSTOM_COLORS.length] };
+    db.customCats.push(c);
+    syncCustom();
+  }
+  return c;
 }
 
 export function load(m = mode) {

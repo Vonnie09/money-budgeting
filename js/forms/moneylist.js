@@ -1,6 +1,6 @@
 /* Add a + or − line to a money list. Each line is a normal entry, so it also
    shows in History, totals and budgets. */
-import { CATEGORIES } from '../config.js';
+import { incomeCats } from '../config.js';
 import { $, round2, uid, ymd, today } from '../utils.js';
 import { evaluate, money } from '../money.js';
 import { db, ui } from '../store.js';
@@ -21,7 +21,7 @@ export function saveListLine(form) {
   const type = kind === 'in' ? 'income' : 'expense';
   // a sign typed after picking a category can flip the side: fall back to a matching category
   let category = form.category.value;
-  const isIncomeCategory = CATEGORIES.income.some(c => c.id === category);
+  const isIncomeCategory = incomeCats().some(c => c.id === category);
   if ((type === 'income') !== isIncomeCategory) category = type === 'income' ? 'cashin' : 'other';
   const rec = {
     id: uid(), ts: Date.now(), type,

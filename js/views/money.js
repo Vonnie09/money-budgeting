@@ -1,5 +1,5 @@
 /* Money List screen: each list (wallet) as a ledger with a running balance. */
-import { ACCOUNT_TYPES, CATEGORIES, cat, expenseCats } from '../config.js';
+import { ACCOUNT_TYPES, cat, expenseCats, incomeCats } from '../config.js';
 import { icon } from '../icons.js';
 import { $, $$, esc, fmtDate, inkOn, parse, today, ymd } from '../utils.js';
 import { money } from '../money.js';
@@ -9,7 +9,7 @@ import { empty } from '../components.js';
 
 // Category options for the quick-add row: spending categories or money-in sources.
 export function lineCategories(kind, selected) {
-  const list = kind === 'in' ? CATEGORIES.income : expenseCats();
+  const list = kind === 'in' ? incomeCats() : expenseCats();
   const sel = list.some(c => c.id === selected) ? selected : (kind === 'in' ? 'cashin' : 'other');
   return list.map(c => `<option value="${c.id}" ${c.id === sel ? 'selected' : ''}>${esc(c.name)}</option>`).join('');
 }

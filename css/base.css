@@ -5,7 +5,7 @@
 html {
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: transparent; /* no grey flash on tap; every control has its own :active */
-  overscroll-behavior: none;               /* app shell: no pull-to-refresh fighting the sheet drag */
+  overscroll-behavior: contain;            /* no accidental pull-to-refresh, but keeps the native bounce */
   scrollbar-color: var(--surface-3) var(--bg);
   accent-color: var(--brand);
 }
@@ -32,3 +32,5 @@ input, select { caret-color: var(--brand); }
 .ic { flex: none; display: block; }
 .num, .amt { font-variant-numeric: tabular-nums; }
 [hidden] { display: none !important; }
+/* while a dialog or sheet is open the page behind it stays still */
+@media (max-width: 880px) { html.modal-open, html.modal-open body { overflow: hidden; } }

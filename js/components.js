@@ -1,6 +1,6 @@
 /* Shared markup: charts, list rows, empty states, progress bars. */
 import { effectiveTheme } from './theme.js';
-import { cat, DEMO_SIZES } from './config.js';
+import { cat, DEMO_SIZES, SIZE_INFO } from './config.js';
 import { icon } from './icons.js';
 import { clamp, esc, fmtDate, parse, sum } from './utils.js';
 import { money, pct } from './money.js';
@@ -76,6 +76,7 @@ export function modeBar() {
       <span>Sample data</span>
       <div class="mode-seg" role="group" aria-label="Sample size">${Object.entries(DEMO_SIZES).map(([s, label]) =>
         `<button type="button" class="${demoSize() === s ? 'on' : ''}" data-action="set-size" data-size="${s}" aria-pressed="${demoSize() === s}">${label}</button>`).join('')}</div>
+      <small class="mode-size-info">${SIZE_INFO[demoSize()].short}</small>
     </div>` : ''}
   </div>`;
 }

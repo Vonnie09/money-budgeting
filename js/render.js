@@ -43,6 +43,8 @@ export function render() {
   ui.stampId = null;
   if (ui.lastView !== v) {
     window.scrollTo(0, 0);
+    // a short settle-in when you switch tabs (not on every save)
+    if (ui.lastView) { el.classList.remove('view-in'); void el.offsetWidth; el.classList.add('view-in'); }
     ui.lastView = v;
   }
   updateBell();

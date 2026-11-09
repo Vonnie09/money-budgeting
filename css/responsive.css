@@ -44,8 +44,8 @@
   .bottom-nav {
     display: flex; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0;
     padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
-    background: color-mix(in srgb, var(--surface) 92%, transparent);
-    backdrop-filter: blur(14px) saturate(160%);
+    /* solid, not a live blur: blurring under the bar on every scroll frame stutters on many phones */
+    background: color-mix(in srgb, var(--surface) 97%, transparent);
     border-top: 1px solid var(--line);
   }
   .bottom-nav a {
@@ -53,7 +53,10 @@
     padding: 6px 2px; border-radius: 12px; text-decoration: none;
     font-size: 11px; font-weight: 700; color: var(--ink-3);
   }
+  .bottom-nav a { transition: background-color 160ms ease, color 160ms ease; }
+  .bottom-nav a:active { background: var(--surface-2); }
   .bottom-nav a.active { color: var(--ink); background: var(--accent-soft); }
+  .modal-backdrop { backdrop-filter: none; background: rgba(14, 14, 16, .6); }
   .bottom-nav a.active .ic { color: var(--accent-deep); }
 
   .fab {

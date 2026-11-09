@@ -1,9 +1,9 @@
 /* Add / edit / delete an income or expense entry. */
-import { CATEGORIES, expenseCats } from '../config.js';
+import { cat, expenseCats, incomeCats, OTHER_IDS } from '../config.js';
 import { icon } from '../icons.js';
 import { $, $$, addDays, esc, fmtDate, parse, round2, today, uid, ymd } from '../utils.js';
 import { currencySymbol, evaluate, groupDigits, money, pct } from '../money.js';
-import { db, ui } from '../store.js';
+import { customCategory, db, ui } from '../store.js';
 import { account, budgetRows } from '../queries.js';
 import { commit } from '../render.js';
 import { closeModal, modalHead, openModal } from '../ui/modal.js';
@@ -11,7 +11,7 @@ import { buzz, toast } from '../ui/toast.js';
 
 /* ----- transaction form ----- */
 export function catChips(type, selected) {
-  const list = type === 'expense' ? expenseCats() : CATEGORIES.income;
+  const list = type === 'expense' ? expenseCats() : incomeCats();
   const sel = list.some(c => c.id === selected) ? selected : list[0].id;
   return list.map(c => `<label class="cat-chip" style="--c:${c.color}">
     <input type="radio" name="category" value="${c.id}" ${c.id === sel ? 'checked' : ''}>
@@ -51,6 +51,9 @@ export function openTx(id, preset = {}) {
         <p class="field-label">Category</p>
         <div class="cat-grid" id="cat-grid">${catChips(d.type, d.category)}</div>
       </div>
+      <label class="field" id="tx-custom" hidden><span>Name it <span class="opt">(optional)</span></span>
+        <input name="customName" class="input" maxlength="30" enterkeyhint="done" autocomplete="off">
+      </label>
       <label class="field"><span>Note <span class="opt">(optional)</span></span>
         <input name="note" class="input" maxlength="60" enterkeyhint="done" placeholder="e.g. Lunch with friends" value="${esc(d.note)}">
       </label>
@@ -85,12 +88,22 @@ export function openTx(id, preset = {}) {
       sync();
     }
   };
-  $('#cat-grid', m).addEventListener('change', followBudget);
+  // picking "Others" shows a field to name it; the name becomes its own category
+  const customField = $('#tx-custom', m);
+  const syncCustomField = () => {
+    const c = form.querySelector('input[name="category"]:checked')?.value;
+    const income = form.querySelector('input[name="type"]:checked').value === 'income';
+    customField.hidden = !OTHER_IDS.includes(c);
+    form.customName.placeholder = income ? 'e.g. Side hustle, Allowance, Refund' : 'e.g. Pet food, Gifts for Mom';
+  };
+  $('#cat-grid', m).addEventListener('change', () => { followBudget(); syncCustomField(); });
   if (!preset.account) followBudget();
+  syncCustomField();
   $$('input[name="type"]', m).forEach(r => r.addEventListener('change', () => {
     const grid = $('#cat-grid', m);
     grid.innerHTML = catChips(r.value, null);
     grid.classList.remove('swap'); void grid.offsetWidth; grid.classList.add('swap');
+    syncCustomField();
   }));
 }
 
@@ -104,10 +117,14 @@ export function saveTx(form) {
     form.amount.focus();
     return;
   }
+  const type = f.get('type');
+  let category = f.get('category');
+  const customName = String(f.get('customName') || '').trim();
+  if (OTHER_IDS.includes(category) && customName) category = customCategory(customName, type).id;
   const rec = {
-    type: f.get('type'),
+    type,
     amount: round2(amount),
-    category: f.get('category'),
+    category,
     account: f.get('account'),
     date: f.get('date') || ymd(today()),
     note: String(f.get('note') || '').trim(),
@@ -119,7 +136,7 @@ export function saveTx(form) {
   closeModal();
   commit();
   buzz();
-  toast(id ? 'Entry updated' : `${rec.type === 'expense' ? 'Expense' : 'Income'} of ${money(rec.amount)} saved`, 'good');
+  toast(id ? 'Entry updated' : `${rec.type === 'expense' ? 'Expense' : 'Income'} of ${money(rec.amount)} saved · ${cat(rec.category).name}`, 'good');
   if (rec.type === 'expense') budgetCheck(rec);
 }
 

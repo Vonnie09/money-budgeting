@@ -21,6 +21,7 @@ export function openModal(html, { cls = '', onClose } = {}) {
     layer.querySelector('.modal').setAttribute('aria-labelledby', heading.id);
   }
   modalRoot.appendChild(layer);
+  document.documentElement.classList.add('modal-open');
   void layer.offsetWidth; // commit the closed position so the open state transitions from it
   layer.classList.add('open');
   enableSheetDrag(layer);
@@ -38,7 +39,10 @@ export function closeModal() {
   if (!layer) return;
   layer.classList.add('closing');
   layer._onClose?.();
-  setTimeout(() => layer.remove(), isSheet() ? 230 : 160);
+  setTimeout(() => {
+    layer.remove();
+    if (!topLayer()) document.documentElement.classList.remove('modal-open');
+  }, isSheet() ? 230 : 160);
   layer._returnFocus?.focus?.({ preventScroll: true });
 }
 
@@ -108,3 +112,25 @@ export function enableSheetDrag(layer) {
 }
 
 export const modalHead = title => `<header class="modal-head"><h2>${title}</h2><button class="icon-btn sm" data-action="close-modal" aria-label="Close">${icon('x', 18)}</button></header>`;
+
+/* In-app "Are you sure?" dialog. It replaces the browser's confirm(), which phone
+   in-app browsers (Messenger, Facebook, Instagram) often block without showing anything.
+   Resolves true for the main button, false for Cancel, the backdrop, Esc or a swipe down. */
+export function askConfirm({ title, message, ok = 'Yes', cancel = 'Cancel', danger = false }) {
+  return new Promise(resolve => {
+    let answered = false;
+    const m = openModal(`${modalHead(title)}
+      <p class="confirm-msg">${message}</p>
+      <div class="form-actions confirm-actions">
+        <button type="button" class="btn" data-confirm="no">${cancel}</button>
+        <button type="button" class="btn ${danger ? 'btn-danger-solid' : 'btn-primary'}" data-confirm="yes" data-autofocus>${ok}</button>
+      </div>`, { cls: 'narrow confirm', onClose: () => { if (!answered) resolve(false); } });
+    m.addEventListener('click', e => {
+      const b = e.target.closest('[data-confirm]');
+      if (!b) return;
+      answered = true;
+      resolve(b.dataset.confirm === 'yes');
+      closeModal();
+    });
+  });
+}

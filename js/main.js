@@ -1,13 +1,13 @@
 /* Entry point: click, form and keyboard handling, then first render. */
 import { saveListLine } from './forms/moneylist.js';
 import { formatTypedAmount } from './money.js';
-import { cat, DEMO_SIZES, NAV } from './config.js';
+import { cat, DEMO_SIZES, NAV, SIZE_INFO } from './config.js';
 import { icon } from './icons.js';
-import { $, $$, addDays, addMonths, endOfMonth, parse, ymd } from './utils.js';
+import { $, $$, addDays, addMonths, endOfMonth, esc, parse, ymd } from './utils.js';
 import { db, demoSize, mode, resetMode, save, setDemoSize, setMode, ui } from './store.js';
 import { setWelcomeDone } from './views/home.js';
 import { commit, currentView, render } from './render.js';
-import { closeModal, topLayer } from './ui/modal.js';
+import { askConfirm, closeModal, topLayer } from './ui/modal.js';
 import { deleteTx, openTx, saveTx } from './forms/entry.js';
 import { openCalc } from './forms/calculator.js';
 import { openBudget, saveBudget } from './forms/budget.js';
@@ -73,9 +73,10 @@ const actions = {
   'edit-bill': el => openBill(el.dataset.id),
   'pay-bill': el => payBill(el.dataset.id),
   'unpay-bill': el => unpayBill(el.dataset.id),
-  'delete-bill': el => {
+  'delete-bill': async el => {
     const b = db.bills.find(x => x.id === el.dataset.id);
-    if (!b || !confirm(`Delete "${b.name}"? Past payments stay in your records.`)) return;
+    if (!b) return;
+    if (!await askConfirm({ title: 'Delete this bill?', message: `<b>${esc(b.name)}</b> will be removed. Past payments stay in your records.`, ok: 'Delete', danger: true })) return;
     db.bills = db.bills.filter(x => x.id !== b.id);
     closeModal(); commit();
     toast('Bill deleted', 'info');
@@ -93,14 +94,19 @@ const actions = {
     if (currentView() === 'money') render(); else location.hash = '#/money';
   },
   'ml-all': () => { ui.mlAll = true; render(); },
-  'set-size': el => {
+  'set-size': async el => {
     const size = el.dataset.size;
     if (size === demoSize()) return;
-    if (!confirm(`Load the ${DEMO_SIZES[size]} sample data? Changes you made in Demo Mode will be replaced.`)) return;
+    const ok = await askConfirm({
+      title: `Load ${DEMO_SIZES[size]} sample data?`,
+      message: `${SIZE_INFO[size].long}.<br>Changes you made in Demo Mode will be replaced.`,
+      ok: `Load ${DEMO_SIZES[size]}`,
+    });
+    if (!ok) return;
     setDemoSize(size);
     resetMode();
     commit();
-    toast(`${DEMO_SIZES[size]} sample data loaded`, 'good');
+    toast(`${DEMO_SIZES[size]} sample loaded: ${db.tx.length} entries, ${db.bills.length} bills, ${Object.keys(db.budgets).length} budgets`, 'good');
   },
   'set-mode': el => {
     if (el.dataset.mode === mode) return;
@@ -108,11 +114,12 @@ const actions = {
     render();
     toast(mode === 'empty' ? 'Empty State: add your own entries from scratch' : 'Demo Mode: exploring sample data', 'good');
   },
-  'reset-mode': () => {
-    const question = mode === 'demo'
-      ? 'Reset the demo? Changes you made to the sample data will be replaced with fresh sample data.'
-      : 'Reset Empty State? Everything you added in Empty State will be cleared.';
-    if (!confirm(question)) return;
+  'reset-mode': async () => {
+    const demo = mode === 'demo';
+    const ok = await askConfirm(demo
+      ? { title: 'Reset the demo?', message: 'Changes you made to the sample data will be replaced with fresh sample data.', ok: 'Reset demo' }
+      : { title: 'Reset Empty State?', message: 'Everything you added in Empty State will be cleared. This can\'t be undone.', ok: 'Clear everything', danger: true });
+    if (!ok) return;
     resetMode();
     commit();
     toast(mode === 'demo' ? 'Demo reset with fresh sample data' : 'Empty State cleared', 'good');

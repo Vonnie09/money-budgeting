@@ -9,14 +9,14 @@ This is a **demo**: there is no database and no login. On the first visit the ap
 | Screen | What it does |
 | --- | --- |
 | **Home** | First-visit welcome guide, total balance, big "Add expense" / "Add income" buttons, how much is left to spend, where your money went, bills due soon (pay in one tap), a tip, recent activity, your wallets |
-| **History** | Day / Week / Month views, previous and next buttons, search, money in/out filter. Tap an entry to edit or delete it (with Undo) |
+| **History** | Day / Week / Month views, previous and next buttons, search, money in/out filter. Tap an entry to edit or delete it (with Undo). When adding an entry (expense or income), pick **Others** and type a name such as "Allowance": it becomes its own category for next time. |
 | **Money List** | One list per pot of money (On hand cash, bank, GCash…). Type `10000` to add, `-200` to spend (e.g. a T-shirt): every line shows the running balance after it, and each line also counts in History, totals and budgets. Shows **Balance**, **Set aside for budgets** and **Free to spend**. |
 | **Budgets** | Monthly limit per category, green/amber/red progress, "you can spend ₱X a day", and alerts when you pass 80% or 100%. Pick **Others** to type your own name (e.g. "Pet food"); it becomes a category you can also use when adding entries. **Take the money from** a money list to set the budget amount aside from it. |
 | **Bills** | Bills shown as tickets with due dates, Paid / Due soon / Overdue labels. "Mark paid" records the expense for you |
 | **Insights** | Personal tips, money in vs. out for 6 months, emergency fund, spending calendar, what changed vs. the previous 30 days |
 | **Add entry** | Type the amount, pick a category, done. Date (today) and wallet are filled in for you; tap "Change" to edit them |
 | **Calculator** | Built-in calculator (top bar, or the calculator button inside the amount field). The amount field also accepts math like `120+85` |
-| **Demo Mode / Empty State** | A switch at the bottom of the sidebar (top of the page on phones). Demo Mode shows sample data; Empty State is a clean start for your own entries. Each keeps its own data. Demo Mode has **Small / Medium / Full** sample data (Medium is about 3 months). **Reset demo** brings back fresh sample data; **Reset empty state** clears your entries. The sun/moon button switches light and dark mode. |
+| **Demo Mode / Empty State** | A switch at the bottom of the sidebar (top of the page on phones). Demo Mode shows sample data; Empty State is a clean start for your own entries. Each keeps its own data. Demo Mode has **Small** (1 month, 3 bills, 4 budgets), **Medium** (3 months, 5 bills, 6 budgets) and **Full** (6 months, 7 bills, 8 budgets) sample data. Questions like "Load Small?" open inside the app, so they also work in Messenger and Facebook browsers. **Reset demo** brings back fresh sample data; **Reset empty state** clears your entries. The sun/moon button switches light and dark mode. |
 | **Settings** | Currency (₱ by default), light/dark theme, show the welcome guide again, and the same Demo / Empty switch |
 
 Keyboard shortcuts on desktop: **N** = new record, **C** = calculator, **Esc** = close.

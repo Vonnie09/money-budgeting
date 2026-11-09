@@ -14,7 +14,7 @@
 .brand-mark svg { display: block; }
 .brand-text { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
 .brand-text b { font: 800 17px/1.05 var(--font-display); letter-spacing: -.01em; white-space: nowrap; }
-.brand-text small { font: 700 10px/1 var(--font); letter-spacing: .34em; text-transform: uppercase; color: var(--on-rail-2); }
+.brand-text small { font: 700 11px/1 var(--font); letter-spacing: .34em; text-transform: uppercase; color: var(--on-rail-2); }
 .nav { display: flex; flex-direction: column; gap: 2px; }
 .nav a {
   display: flex; align-items: center; gap: 12px;
