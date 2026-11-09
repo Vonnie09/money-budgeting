@@ -3,7 +3,7 @@ import { formatTypedAmount } from './money.js';
 import { NAV, cat } from './config.js';
 import { icon } from './icons.js';
 import { $, $$, addDays, addMonths, endOfMonth, parse, ymd } from './utils.js';
-import { db, save, seed, setDb, ui } from './store.js';
+import { db, mode, resetMode, save, setMode, ui } from './store.js';
 import { setWelcomeDone } from './views/home.js';
 import { commit, currentView, render } from './render.js';
 import { closeModal, topLayer } from './ui/modal.js';
@@ -85,20 +85,20 @@ const actions = {
   'edit-account': el => openAccount(el.dataset.id),
   'delete-account': el => deleteAccount(el.dataset.id),
 
-  'reset-demo': () => {
-    if (!confirm('Replace everything with fresh sample data?')) return;
-    const currency = db.currency;
-    setDb(seed());
-    db.currency = currency;
-    closeModal(); commit();
-    toast('Sample data restored', 'good');
+  'set-mode': el => {
+    if (el.dataset.mode === mode) return;
+    setMode(el.dataset.mode);
+    render();
+    toast(mode === 'empty' ? 'Empty State: add your own entries from scratch' : 'Demo Mode: exploring sample data', 'good');
   },
-  'clear-all': () => {
-    if (!confirm('Remove all entries, bills and budgets? Your wallets stay, with a zero balance.')) return;
-    db.tx = []; db.bills = []; db.budgets = {};
-    db.accounts.forEach(a => { a.start = 0; });
-    closeModal(); commit();
-    toast('Starting fresh. Tap + to add your first record.', 'good');
+  'reset-mode': () => {
+    const question = mode === 'demo'
+      ? 'Reset the demo? Changes you made to the sample data will be replaced with fresh sample data.'
+      : 'Reset Empty State? Everything you added in Empty State will be cleared.';
+    if (!confirm(question)) return;
+    resetMode();
+    commit();
+    toast(mode === 'demo' ? 'Demo reset with fresh sample data' : 'Empty State cleared', 'good');
   },
 };
 

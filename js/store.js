@@ -1,5 +1,5 @@
 /* Sample data, saving to this browser, and shared app state. */
-import { STORE_KEY } from './config.js';
+import { EMPTY_KEY, MODE_KEY, STORE_KEY } from './config.js';
 import { addDays, addMonths, endOfMonth, monthKey, round2, startOfMonth, sum, today, ymd } from './utils.js';
 import { setCurrency } from './money.js';
 
@@ -82,22 +82,57 @@ export function seed() {
   return { version: 1, currency: 'PHP', accounts, bills, tx, budgets };
 }
 
-export function load() {
+/* ---------- Demo Mode / Empty State ----------
+   Each mode keeps its own saved data, so switching never loses anything. */
+const keyFor = m => (m === 'empty' ? EMPTY_KEY : STORE_KEY);
+
+// Empty State starts with the usual wallets at zero and nothing else.
+export function blank(currency = 'PHP') {
+  return {
+    version: 1, currency, bills: [], tx: [], budgets: {},
+    accounts: [
+      { id: 'cash',      name: 'Cash Wallet',    type: 'cash',    start: 0, color: '#FFAD33' },
+      { id: 'bank',      name: 'Savings Bank',   type: 'bank',    start: 0, color: '#3B3F45' },
+      { id: 'ewallet',   name: 'E-Wallet',       type: 'ewallet', start: 0, color: '#4A6378' },
+      { id: 'emergency', name: 'Emergency Fund', type: 'savings', start: 0, color: '#FF8F00', emergency: true },
+    ],
+  };
+}
+
+export let mode = (() => { try { return localStorage.getItem(MODE_KEY) === 'empty' ? 'empty' : 'demo'; } catch { return 'demo'; } })();
+
+export function load(m = mode) {
   try {
-    const raw = localStorage.getItem(STORE_KEY);
+    const raw = localStorage.getItem(keyFor(m));
     if (raw) {
       const data = JSON.parse(raw);
       if (data && data.version === 1) return data;
     }
-  } catch { /* storage blocked or corrupted: fall back to fresh demo data */ }
-  return seed();
+  } catch { /* storage blocked or corrupted: fall back to fresh data */ }
+  return m === 'empty' ? blank() : seed();
 }
 export function save() {
-  try { localStorage.setItem(STORE_KEY, JSON.stringify(db)); } catch { /* private mode: keep working in memory */ }
+  try { localStorage.setItem(keyFor(mode), JSON.stringify(db)); } catch { /* private mode: keep working in memory */ }
 }
 
 export let db = load();
 setCurrency(db.currency);
+
+// Switch datasets; the current one is saved first.
+export function setMode(next) {
+  if (next === mode) return;
+  save();
+  mode = next;
+  try { localStorage.setItem(MODE_KEY, next); } catch { /* ignore */ }
+  db = load(next);
+  setCurrency(db.currency);
+}
+
+// "Reset demo" brings back fresh sample data; "Reset empty state" clears your entries.
+export function resetMode() {
+  const currency = db.currency;
+  db = mode === 'empty' ? blank(currency) : Object.assign(seed(), { currency });
+}
 
 export const ui = {
   period: 'month',
@@ -109,5 +144,3 @@ export const ui = {
   lastView: null,
 };
 
-// Replace all data at once (used by "Bring back sample data").
-export function setDb(next) { db = next; }

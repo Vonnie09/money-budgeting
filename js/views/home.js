@@ -3,7 +3,7 @@ import { ACCOUNT_TYPES, WELCOME_KEY } from '../config.js';
 import { icon } from '../icons.js';
 import { addDays, clamp, endOfMonth, esc, fmtDate, inkOn, startOfMonth, sum, today } from '../utils.js';
 import { money, moneyShort, pct } from '../money.js';
-import { db, save, ui } from '../store.js';
+import { db, mode, save, ui } from '../store.js';
 import { accountBalance, billStatus, budgetRows, byCategory, insights, netWorth, sortTx, totals, txBetween } from '../queries.js';
 import { donut, empty, legend, topSegments, txRow } from '../components.js';
 
@@ -24,7 +24,7 @@ export function welcomeCard() {
   return `<section class="card welcome${first ? ' first' : ''}">
     <div>
       <h2>Welcome to Money Manager</h2>
-      <p>This demo is filled with sample data so you can try everything. Your changes stay on this device.</p>
+      <p>${mode === 'empty' ? 'You are in Empty State: a clean start for your own income and expenses.' : 'This demo is filled with sample data so you can try everything.'} Your changes stay on this device.</p>
     </div>
     <ol class="steps">
       <li><span><b>Add</b> what you spend or earn with the <b>+</b> button.</span></li>

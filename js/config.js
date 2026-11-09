@@ -2,6 +2,8 @@
 
 export const STORE_KEY = 'mm-demo-v4';
 export const THEME_KEY = 'mm-theme';
+export const EMPTY_KEY = 'mm-empty-v1';   // your own data in Empty State
+export const MODE_KEY = 'mm-mode';        // 'demo' or 'empty'
 
 /* ---------- reference data ---------- */
 export const CATEGORIES = {

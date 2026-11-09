@@ -34,10 +34,9 @@
         <span>Money Manager</span>
       </a>
       <nav class="nav" id="side-nav" aria-label="Main"></nav>
-      <div class="demo-note">
-        <span class="pill lime">Demo mode</span>
-        <p>Sample data only. Everything you add stays in this browser. Nothing is sent anywhere.</p>
-        <button class="link-btn" data-action="settings">Reset or clear data</button>
+      <div class="mode-side">
+        <div data-mode-slot></div>
+        <p>Everything you add stays in this browser. Nothing is sent anywhere.</p>
       </div>
     </aside>
 
@@ -58,6 +57,7 @@
         </div>
       </header>
 
+      <div class="mode-top" data-mode-slot></div>
       <section id="view" aria-live="polite"></section>
     </main>
 

@@ -1,9 +1,10 @@
 /* Shared markup: charts, list rows, empty states, progress bars. */
+import { effectiveTheme } from './theme.js';
 import { cat } from './config.js';
 import { icon } from './icons.js';
 import { clamp, esc, fmtDate, parse, sum } from './utils.js';
 import { money, pct } from './money.js';
-import { ui } from './store.js';
+import { mode, ui } from './store.js';
 import { account } from './queries.js';
 
 /* ---------- charts ---------- */
@@ -59,4 +60,17 @@ export const progress = (p, state) => `<div data-state="${state}"><div class="pr
 export function greeting() {
   const h = new Date().getHours();
   return h < 12 ? 'Good morning' : h < 18 ? 'Good afternoon' : 'Good evening';
+}
+
+/* ---------- Demo Mode / Empty State bar ---------- */
+export function modeBar() {
+  const dark = effectiveTheme() === 'dark';
+  const opt = (m, label) => `<button type="button" class="${mode === m ? 'on' : ''}" data-action="set-mode" data-mode="${m}" aria-pressed="${mode === m}">${label}</button>`;
+  return `<div class="mode-bar">
+    <div class="mode-seg" role="group" aria-label="Data">${opt('demo', 'Demo Mode')}${opt('empty', 'Empty State')}</div>
+    <div class="mode-actions">
+      <button type="button" class="mode-reset" data-action="reset-mode" aria-label="${mode === 'demo' ? 'Reset demo' : 'Reset empty state'}">Reset<span class="mode-reset-what"> ${mode === 'demo' ? 'demo' : 'empty state'}</span></button>
+      <button type="button" class="mode-theme" data-action="theme" aria-label="Switch to ${dark ? 'light' : 'dark'} mode" title="Switch to ${dark ? 'light' : 'dark'} mode">${icon(dark ? 'sun' : 'moon', 18)}</button>
+    </div>
+  </div>`;
 }

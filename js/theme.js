@@ -21,5 +21,6 @@ export function paintThemeButton() {
     const forDark = m.media.includes('dark');
     m.setAttribute('content', auto ? (forDark ? '#0E0E10' : '#D9DDE1') : (dark ? '#0E0E10' : '#D9DDE1'));
   });
+  document.dispatchEvent(new Event('themechange'));
 }
 darkQuery.addEventListener?.('change', paintThemeButton);

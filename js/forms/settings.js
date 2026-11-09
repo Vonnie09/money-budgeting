@@ -5,7 +5,7 @@ import { $, $$, esc } from '../utils.js';
 import { setCurrency } from '../money.js';
 import { db } from '../store.js';
 import { alerts } from '../queries.js';
-import { empty } from '../components.js';
+import { empty, modeBar } from '../components.js';
 import { commit } from '../render.js';
 import { modalHead, openModal } from '../ui/modal.js';
 import { toast } from '../ui/toast.js';
@@ -39,12 +39,9 @@ export function openSettings() {
       <button class="btn" data-action="show-welcome">Show the welcome guide again</button>
     </div>
     <div class="settings-group">
-      <h3>Demo data</h3>
-      <p class="hint">This is a demo. Everything is saved only in this browser, so nothing leaves your device.</p>
-      <div class="form-actions">
-        <button class="btn" data-action="reset-demo">Bring back sample data</button>
-        <button class="btn btn-danger" data-action="clear-all">Start empty</button>
-      </div>
+      <h3>Data</h3>
+      <p class="hint">Demo Mode shows sample data. Empty State is a clean start for your own entries. Each keeps its own data, saved only in this browser.</p>
+      <div data-mode-slot>${modeBar()}</div>
     </div>`, { cls: 'narrow' });
   $('#set-currency').addEventListener('change', e => { db.currency = e.target.value; setCurrency(db.currency); commit(); toast('Currency updated', 'good'); });
   $$('input[name="theme"]').forEach(r => r.addEventListener('change', () => setTheme(r.value)));

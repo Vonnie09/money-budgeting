@@ -9,6 +9,7 @@
 @media (max-width: 880px) {
   .app { grid-template-columns: 1fr; }
   .sidebar { display: none; }
+  .mode-top { display: block; margin-bottom: 16px; }
   .main { padding: 0 max(16px, env(safe-area-inset-right, 0px)) calc(104px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
   .desktop-only { display: none; }
   .topbar { padding: calc(16px + env(safe-area-inset-top, 0px)) 0 14px; }

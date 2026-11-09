@@ -15,7 +15,8 @@ This is a **demo**: there is no database and no login. On the first visit the ap
 | **Insights** | Personal tips, money in vs. out for 6 months, emergency fund, spending calendar, what changed vs. the previous 30 days |
 | **Add entry** | Type the amount, pick a category, done. Date (today) and wallet are filled in for you; tap "Change" to edit them |
 | **Calculator** | Built-in calculator (top bar, or the calculator button inside the amount field). The amount field also accepts math like `120+85` |
-| **Settings** | Currency (₱ by default), light/dark theme, show the welcome guide again, bring back sample data, start empty |
+| **Demo Mode / Empty State** | A switch at the bottom of the sidebar (top of the page on phones). Demo Mode shows sample data; Empty State is a clean start for your own entries. Each keeps its own data. **Reset demo** brings back fresh sample data; **Reset empty state** clears your entries. The sun/moon button switches light and dark mode. |
+| **Settings** | Currency (₱ by default), light/dark theme, show the welcome guide again, and the same Demo / Empty switch |
 
 Keyboard shortcuts on desktop: **N** = new record, **C** = calculator, **Esc** = close.
 
@@ -136,5 +137,5 @@ You can also edit directly on GitHub: open a file, click the ✏️ pencil icon,
 | --- | --- |
 | Vercel shows **404: NOT_FOUND** | `index.html` is inside a sub-folder in your repo. Re-upload the files themselves (not the folder), or in Vercel go to **Settings**, then **General**, and set **Root Directory** to that folder. |
 | Page loads with no styling, or is blank | Make sure the `css` and `js` **folders** were uploaded with all their files, and that old `styles.css` / `app.js` files are no longer needed. |
-| I want the sample data back | Open the app, click **Settings** (sliders icon), then **Reset sample data**. |
+| I want the sample data back | Switch to **Demo Mode**, then click **Reset demo**. |
 | Changes don't show | Wait a minute, then hard-refresh (**Cmd + Shift + R** on Mac, **Ctrl + F5** on Windows). |

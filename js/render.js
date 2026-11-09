@@ -3,7 +3,7 @@ import { icon } from './icons.js';
 import { $, $$, fmtDate, today } from './utils.js';
 import { save, ui } from './store.js';
 import { alerts } from './queries.js';
-import { greeting } from './components.js';
+import { greeting, modeBar } from './components.js';
 import { renderHome } from './views/home.js';
 import { afterRecords, renderRecords } from './views/history.js';
 import { renderBudgets } from './views/budgets.js';
@@ -44,7 +44,13 @@ export function render() {
     ui.lastView = v;
   }
   updateBell();
+  paintModeBars();
 }
+
+export function paintModeBars() {
+  $$('[data-mode-slot]').forEach(el => { el.innerHTML = modeBar(); });
+}
+document.addEventListener('themechange', paintModeBars);
 
 export function commit() { save(); render(); }
 
