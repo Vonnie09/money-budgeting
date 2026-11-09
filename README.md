@@ -1,4 +1,4 @@
-# Money Manager (Demo)
+# Money Budgeting (Demo)
 
 Track expenses in seconds. See where your money goes, set budgets, organise bills, and get personal insights. All of it runs in the browser.
 

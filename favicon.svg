@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40"><rect width="40" height="40" rx="11" fill="#0E0E10"/><circle cx="26" cy="15" r="9" fill="#FF8F00"/><path d="M10 29V15l8 6 8-6v14" fill="none" stroke="#F7F8F9" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <!-- Money Budgeting app icon: a wallet that smiles back -->
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#FFB81C"/>
+      <stop offset="1" stop-color="#FF6A00"/>
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="15" fill="url(#bg)"/>
+  <!-- card tucked behind the wallet -->
+  <path d="M20.5 21.6 L38.8 16.7 Q41.2 16.1 41.9 18.5 L42.9 22 Z" fill="#FFE3C2"/>
+  <!-- wallet body -->
+  <rect x="16" y="21.4" width="31.6" height="24" rx="7" fill="#FFFFFF"/>
+  <!-- face -->
+  <circle cx="22.5" cy="29.6" r="1.6" fill="#FF7A00"/>
+  <circle cx="28.4" cy="29.6" r="1.6" fill="#FF7A00"/>
+  <path d="M20.6 35 Q25.5 40.2 30.4 35" fill="none" stroke="#FF7A00" stroke-width="2.4" stroke-linecap="round"/>
+  <!-- clasp -->
+  <rect x="34.4" y="27.4" width="15.2" height="10.6" rx="5.3" fill="#FF6A00"/>
+  <circle cx="40.2" cy="32.7" r="2.4" fill="#FFFFFF"/>
+</svg>

@@ -35,7 +35,7 @@ export function render() {
   });
   $('#page-title').textContent = view.title;
   $('#page-sub').textContent = view.sub();
-  document.title = `${view.title} · Money Manager`;
+  document.title = `${view.title} · Money Budgeting`;
   const el = $('#view');
   el.innerHTML = view.render();
   view.after?.();

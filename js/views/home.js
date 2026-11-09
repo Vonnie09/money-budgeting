@@ -23,7 +23,7 @@ export function welcomeCard() {
   ui.welcomeShown = true;
   return `<section class="card welcome${first ? ' first' : ''}">
     <div>
-      <h2>Welcome to Money Manager</h2>
+      <h2>Welcome to Money Budgeting</h2>
       <p>${mode === 'empty' ? 'You are in Empty State: a clean start for your own income and expenses.' : 'This demo is filled with sample data so you can try everything.'} Your changes stay on this device.</p>
     </div>
     <ol class="steps">
