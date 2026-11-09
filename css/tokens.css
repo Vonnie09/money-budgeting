@@ -1,0 +1,79 @@
+/* =========================================================
+   Money Manager: "Ember" palette
+   Core:     Black #0E0E10 · Charcoal #3B3F45 · Orange #FF8F00 · Amber #FFAD33 · Mist #D9DDE1
+   Extended: graphite #1A1B1F, slate #565B62, steel blue #4A6378, ember #A35200,
+             sage #2F8F6F, brick #C0392B, amber cream #FFF0D6, cloud #F7F8F9
+   Orange and amber carry black text (8:1); orange as text uses ember on light grounds.
+   ========================================================= */
+
+:root {
+  --bg: #D9DDE1;            /* mist, the page ground */
+  --surface: #F7F8F9;       /* cloud cards */
+  --surface-2: #ECEEF1;
+  --surface-3: #C9CED4;
+  --ink: #0E0E10;           /* black */
+  --ink-2: #3B3F45;         /* charcoal */
+  --ink-3: #565B62;         /* slate, small secondary text */
+  --steel: #4A6378;
+  --line: #DADDE2;
+  --brand: #0E0E10;         /* primary buttons, focus, active tabs */
+  --brand-soft: #E4E6EA;
+  --on-brand: #F7F8F9;
+  --accent: #FF8F00;        /* orange: the circle, FAB, highlights, money-out bars */
+  --accent-2: #FFAD33;      /* amber: second accent */
+  --accent-deep: #A35200;   /* ember: orange used as text on light */
+  --accent-soft: #FFEACC;
+  --on-accent: #0E0E10;
+  --hero: linear-gradient(140deg, #0E0E10 0%, #1A1B1F 55%, #3B3F45 100%);
+  --rail: #0E0E10;
+  --on-rail: #F7F8F9;
+  --on-rail-2: #A3A8AF;
+  --expense: #C0392B;
+  --expense-soft: #FBE3E0;
+  --income: #2F8F6F;
+  --income-soft: #DDF1E8;
+  --warn: #8A5A00;
+  --warn-soft: #FFF1D6;
+  --tip: #FFF0D6;
+  --shadow: 0 1px 2px rgba(14, 14, 16, .05), 0 10px 28px -14px rgba(14, 14, 16, .22);
+  --shadow-lg: 0 2px 6px rgba(14, 14, 16, .08), 0 24px 48px -20px rgba(14, 14, 16, .34);
+  --hero-shadow: 0 18px 40px -18px rgba(14, 14, 16, .6);
+  --brand-shadow: rgba(14, 14, 16, .4);
+  --radius: 20px;
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --font: 'Manrope', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Archivo', 'Manrope', ui-sans-serif, system-ui, sans-serif;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0E0E10; --surface: #1A1B1F; --surface-2: #24262B; --surface-3: #3B3F45;
+    --ink: #ECEEF1; --ink-2: #B5BAC1; --ink-3: #8B9097; --steel: #8FA6B8; --line: #2A2D33;
+    --brand: #ECEEF1; --brand-soft: #2A2D33; --on-brand: #0E0E10;
+    --accent: #FF8F00; --accent-2: #FFAD33; --accent-deep: #FFAD33; --accent-soft: #33240C; --on-accent: #0E0E10;
+    --hero: linear-gradient(140deg, #24262B 0%, #2E3136 55%, #3B3F45 100%);
+    --rail: #08080A; --on-rail: #ECEEF1; --on-rail-2: #8B9097;
+    --expense: #FF6B5B; --expense-soft: #3A1D1A; --income: #4FC79A; --income-soft: #13302A;
+    --warn: #FFAD33; --warn-soft: #33270F; --tip: #2A2214;
+    --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 10px 28px -14px rgba(0, 0, 0, .7);
+    --shadow-lg: 0 2px 6px rgba(0, 0, 0, .4), 0 24px 48px -20px rgba(0, 0, 0, .8);
+    --hero-shadow: 0 18px 40px -18px rgba(0, 0, 0, .8); --brand-shadow: rgba(0, 0, 0, .5);
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0E0E10; --surface: #1A1B1F; --surface-2: #24262B; --surface-3: #3B3F45;
+  --ink: #ECEEF1; --ink-2: #B5BAC1; --ink-3: #8B9097; --steel: #8FA6B8; --line: #2A2D33;
+  --brand: #ECEEF1; --brand-soft: #2A2D33; --on-brand: #0E0E10;
+  --accent: #FF8F00; --accent-2: #FFAD33; --accent-deep: #FFAD33; --accent-soft: #33240C; --on-accent: #0E0E10;
+  --hero: linear-gradient(140deg, #24262B 0%, #2E3136 55%, #3B3F45 100%);
+  --rail: #08080A; --on-rail: #ECEEF1; --on-rail-2: #8B9097;
+  --expense: #FF6B5B; --expense-soft: #3A1D1A; --income: #4FC79A; --income-soft: #13302A;
+  --warn: #FFAD33; --warn-soft: #33270F; --tip: #2A2214;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .35), 0 10px 28px -14px rgba(0, 0, 0, .7);
+  --shadow-lg: 0 2px 6px rgba(0, 0, 0, .4), 0 24px 48px -20px rgba(0, 0, 0, .8);
+  --hero-shadow: 0 18px 40px -18px rgba(0, 0, 0, .8); --brand-shadow: rgba(0, 0, 0, .5);
+  color-scheme: dark;
+}

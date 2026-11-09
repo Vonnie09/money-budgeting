@@ -5,14 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, interactive-widget=resizes-content">
   <title>Money Manager · Demo</title>
   <meta name="description" content="Track expenses in seconds. See where money goes, set budgets and organise bills. A demo web app with sample data.">
-  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#E9E4E0">
-  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0F1D28">
+  <meta name="theme-color" media="(prefers-color-scheme: light)" content="#D9DDE1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#0E0E10">
   <meta name="color-scheme" content="light dark">
   <link rel="icon" href="favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,600..900&family=Manrope:wght@400..800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
+  <!-- order matters: later files build on earlier ones -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/screens.css">
+  <link rel="stylesheet" href="css/responsive.css">
   <script>
     // Apply the saved theme before the page paints, so there is no flash.
     try { var t = localStorage.getItem('mm-theme'); if (t === 'light' || t === 'dark') document.documentElement.dataset.theme = t; } catch (e) {}
@@ -64,6 +70,6 @@
   <div id="modal-root"></div>
   <div id="toasts" aria-live="polite"></div>
 
-  <script src="app.js"></script>
+  <script type="module" src="js/main.js"></script>
 </body>
 </html>

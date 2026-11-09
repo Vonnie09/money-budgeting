@@ -1,0 +1,101 @@
+/* Tablet and phone layouts (keep this file last). */
+
+/* ---------- responsive ---------- */
+@media (max-width: 1180px) {
+  .col-8 { grid-column: span 12; }
+  .col-7, .col-5, .col-4, .col-3 { grid-column: span 6; }
+}
+
+@media (max-width: 880px) {
+  .app { grid-template-columns: 1fr; }
+  .sidebar { display: none; }
+  .main { padding: 0 max(16px, env(safe-area-inset-right, 0px)) calc(104px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+  .desktop-only { display: none; }
+  .topbar { padding: calc(16px + env(safe-area-inset-top, 0px)) 0 14px; }
+  .page-heading h1 { font-size: 24px; }
+  .top-actions { gap: 6px; }
+  .icon-btn { width: 40px; height: 40px; }
+
+  .grid { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .grid > * { grid-column: 1 / -1; }
+  .stack { gap: 16px; }
+
+  .bottom-nav {
+    display: flex; position: fixed; z-index: 40; left: 0; right: 0; bottom: 0;
+    padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--surface) 92%, transparent);
+    backdrop-filter: blur(14px) saturate(160%);
+    border-top: 1px solid var(--line);
+  }
+  .bottom-nav a {
+    flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    padding: 6px 2px; border-radius: 12px; text-decoration: none;
+    font-size: 11px; font-weight: 700; color: var(--ink-3);
+  }
+  .bottom-nav a.active { color: var(--ink); background: var(--accent-soft); }
+  .bottom-nav a.active .ic { color: var(--accent-deep); }
+
+  .fab {
+    display: grid; place-items: center; position: fixed; z-index: 41;
+    right: 16px; bottom: calc(88px + env(safe-area-inset-bottom));
+    width: 58px; height: 58px; border-radius: 18px; border: 0;
+    background: var(--accent); color: #0E0E10;
+    box-shadow: var(--hero-shadow);
+    cursor: pointer; transition: transform 140ms var(--ease-out);
+  }
+  .fab:active { transform: scale(0.95); }
+
+  .hero { padding: 22px 20px; }
+  .hero::before { width: 150px; height: 150px; right: -60px; top: -60px; }
+  .hero::after { display: none; }
+  .hero-amount { font-size: 40px; }
+  .welcome { grid-template-columns: minmax(0, 1fr); gap: 16px; margin-bottom: 16px; }
+  .stepper span { min-width: 0; font-size: 16px; }
+  .toolbar { flex-direction: column; align-items: stretch; }
+  .toolbar .seg { align-self: flex-start; }
+  .stepper { justify-content: space-between; }
+  .search { max-width: none; }
+  .bill-list, .budget-list, .insight-rows { grid-template-columns: minmax(0, 1fr); }
+  .insight-rows .insight:nth-child(2) { border-top: 1px solid var(--line); }
+  .stat-strip > div { padding: 12px 14px; }
+  .stat-strip strong { font-size: 17px; }
+}
+
+@media (max-width: 640px) {
+  .modal-layer { place-items: end stretch; padding: 0; }
+  .modal {
+    width: 100%; max-height: 92dvh;
+    border-radius: 24px 24px 0 0;
+    padding: 10px 16px calc(20px + env(safe-area-inset-bottom));
+    opacity: 1; transform: translateY(100%);
+    transition: transform 420ms var(--ease-drawer);
+  }
+  .modal.narrow { width: 100%; }
+  .modal-layer.closing .modal { opacity: 1; transform: translateY(100%); transition: transform 220ms var(--ease-out); }
+  .sheet-grip { display: block; }
+  .modal-head { touch-action: none; }
+  .donut-row { flex-direction: column; align-items: stretch; }
+  .donut-wrap { align-self: center; width: 170px; }
+  .row2 { grid-template-columns: 1fr; }
+  .bars { gap: 6px; height: 180px; }
+  .amount-input { font-size: 34px; }
+  .cat-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+  .hide-xs { display: none; }
+}
+
+@media (max-width: 480px) {
+  .hero-amount { font-size: 36px; }
+  .hero-amount.long { font-size: 26px; font-stretch: 100%; }
+  .hero::before { width: 100px; height: 100px; right: -50px; top: -50px; }
+  .hero-split { grid-template-columns: minmax(0, 1fr); }
+  .big-number { font-size: 32px; }
+  .stat-strip { grid-template-columns: minmax(0, 1fr); }
+  .stat-strip > div { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+  .stat-strip > div + div { border-left: 0; border-top: 1px solid var(--line); }
+  .wallet { grid-template-columns: 44px minmax(0, 1fr); row-gap: 2px; }
+  .wallet .amt { grid-column: 2; }
+  .tx { grid-template-columns: 38px minmax(0, 1fr) auto; gap: 10px; }
+  .tx .tx-ico { width: 38px; height: 38px; }
+  .tx .amt { font-size: 14px; }
+  .kpi strong { font-size: 23px; }
+}

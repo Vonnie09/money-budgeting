@@ -22,18 +22,48 @@ Keyboard shortcuts on desktop: **N** = new record, **C** = calculator, **Esc** =
 ## Files
 
 ```
-index.html   page structure
-styles.css   all the design (colours, layout, dark mode)
-app.js       all the logic and sample data
-favicon.svg  browser tab icon
-README.md    this guide
+index.html            page structure; loads the css and js below
+favicon.svg           browser tab icon
+README.md             this guide
+
+css/                  the design, loaded in this order
+  tokens.css          colours, fonts, shadows (light + dark mode)
+  base.css            page defaults and phone basics
+  layout.css          sidebar, top bar, bottom tabs, card grid
+  components.css      cards, buttons, forms, lists, charts, dialogs
+  screens.css         Home, Budgets, Bills, Insights specifics
+  responsive.css      tablet and phone layouts (keep last)
+
+js/                   the logic, as small modules
+  main.js             starts the app; handles clicks, forms, keys
+  render.js           switches screens and redraws after changes
+  config.js           categories, wallet types, currencies, menu
+  store.js            sample data and saving to this browser
+  queries.js          totals, budgets, bills, insights
+  money.js            money formatting, math in amount fields, commas while typing
+  utils.js            small helpers and dates
+  icons.js            the drawn icon set
+  components.js       shared pieces: charts, list rows, empty states
+  theme.js            light / dark / system
+  views/              one file per screen: home, history, budgets, bills, insights
+  forms/              entry, calculator, budget, bill, wallet, settings
+  ui/                 dialogs (modal.js) and pop-up messages (toast.js)
 ```
 
 No build step and no `npm install`. It is plain HTML, CSS, and JavaScript.
+Amount fields add commas as you type (`1250000` becomes `1,250,000`), and still accept math like `1,200+850`.
 
 ## Run it on your computer
 
-Double-click `index.html` to open it in your browser. That's it.
+The code is split into JavaScript modules, which browsers only load from a web address
+(double-clicking `index.html` shows a blank page). Start a tiny local server instead:
+
+```bash
+cd ~/moneybudegeting
+python3 -m http.server 5173
+```
+
+Then open **http://localhost:5173**. Press **Ctrl + C** in Terminal to stop it.
 
 ---
 
@@ -54,13 +84,13 @@ Double-click `index.html` to open it in your browser. That's it.
 1. On the new empty repository page, find the link **"uploading an existing file"** and click it.
    (Or go to the **Add file ▾** button, then **Upload files**.)
 2. Open the `moneybudegeting` folder in Finder.
-3. Select these 5 files: `index.html`, `styles.css`, `app.js`, `favicon.svg`, `README.md`.
+3. Select `index.html`, `favicon.svg`, `README.md` **and** the `css` and `js` folders.
 4. **Drag them into the GitHub upload box.**
-   ⚠️ Drag the **files**, not the folder. `index.html` must sit at the top level of the repository, or Vercel will show a 404.
+   ⚠️ Drag what is *inside* `moneybudegeting`, not the `moneybudegeting` folder itself. `index.html` must sit at the top level of the repository, or Vercel will show a 404. The `css` and `js` folders keep their names and contents when you drag them in (use Chrome or Edge for folder uploads).
 5. Scroll down. In **Commit changes**, type a message like `First upload`.
 6. Click **Commit changes**.
 
-You should now see the 5 files listed in your repository. ✅
+You should now see `index.html`, `favicon.svg`, `README.md`, `css` and `js` in your repository. ✅
 
 ---
 
@@ -92,7 +122,7 @@ Your demo is live. Share that link with anyone.
 
 Every time you change a file on GitHub, Vercel redeploys automatically.
 
-1. Edit the file on your computer (for example `styles.css`).
+1. Edit the file on your computer (for example `css/tokens.css` to change a colour).
 2. In your GitHub repository click **Add file ▾**, then **Upload files**.
 3. Drag the changed file in. GitHub replaces the old one with the same name.
 4. Click **Commit changes**.
@@ -105,6 +135,6 @@ You can also edit directly on GitHub: open a file, click the ✏️ pencil icon,
 | Problem | Fix |
 | --- | --- |
 | Vercel shows **404: NOT_FOUND** | `index.html` is inside a sub-folder in your repo. Re-upload the files themselves (not the folder), or in Vercel go to **Settings**, then **General**, and set **Root Directory** to that folder. |
-| Page loads with no styling | Make sure `styles.css` and `app.js` were uploaded with exactly those names (lower-case). |
+| Page loads with no styling, or is blank | Make sure the `css` and `js` **folders** were uploaded with all their files, and that old `styles.css` / `app.js` files are no longer needed. |
 | I want the sample data back | Open the app, click **Settings** (sliders icon), then **Reset sample data**. |
 | Changes don't show | Wait a minute, then hard-refresh (**Cmd + Shift + R** on Mac, **Ctrl + F5** on Windows). |
